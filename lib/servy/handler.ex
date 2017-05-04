@@ -24,11 +24,15 @@ defmodule Servy.Handler do
     %{ conv | resp_body: "Bears, Lions, Tigers" }
   end
 
+  defp route(conv, "/international-wildthings") do
+    %{ conv | resp_body: "Beärs, Liöns, Tigers" }
+  end
+
   defp format_response(conv) do
     """
     HTTP/1.1 200 OK
     Content-Type: text/html
-    Content-Length: #{String.length(conv.resp_body)}
+    Content-Length: #{byte_size(conv.resp_body)}
 
     #{conv.resp_body}
     """
