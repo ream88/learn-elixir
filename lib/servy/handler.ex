@@ -6,20 +6,24 @@ defmodule Servy.Handler do
   end
 
   def parse(request) do
-    %{ method: "GET", path: "/wildthings", resp_body: "" }
+    lines = String.split(request, "\n")
+    first_line = Enum.at(lines, 0)
+    [method, path, _] = String.split(first_line, " ")
+
+    %{ method: method, path: path, resp_body: "" }
   end
 
   def route(conv) do
-    %{ method: "GET", path: "/wildthings", resp_body: "Bears, Lions and Tigers" }
+    %{ conv | resp_body: "Bears, Lions, Tigers" }
   end
 
   def format_response(conv) do
     """
     HTTP/1.1 200 OK
     Content-Type: text/html
-    Content-Length: 20
+    Content-Length: #{String.length(conv.resp_body)}
 
-    Bears, Lions, Tigers
+    #{conv.resp_body}
     """
   end
 end
