@@ -1,14 +1,17 @@
 defmodule Servy.Handler do
   def handle(request) do
-    conv = parse(request)
-    conv = route(conv)
-    format_response(conv)
+    request
+    |> parse
+    |> route
+    |> format_response
   end
 
   def parse(request) do
-    lines = String.split(request, "\n")
-    first_line = Enum.at(lines, 0)
-    [method, path, _] = String.split(first_line, " ")
+    [method, path, _] =
+      request
+      |> String.split("\n")
+      |> Enum.at(0)
+      |> String.split(" ")
 
     %{ method: method, path: path, resp_body: "" }
   end
