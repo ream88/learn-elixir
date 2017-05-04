@@ -17,6 +17,10 @@ defmodule Servy.Handler do
   end
 
   defp route(conv) do
+    route(conv, conv.path)
+  end
+
+  defp route(conv, "/wildthings") do
     %{ conv | resp_body: "Bears, Lions, Tigers" }
   end
 
