@@ -6,7 +6,7 @@ defmodule Servy.Handler do
     |> format_response
   end
 
-  def parse(request) do
+  defp parse(request) do
     [method, path, _] =
       request
       |> String.split("\n")
@@ -16,11 +16,11 @@ defmodule Servy.Handler do
     %{ method: method, path: path, resp_body: "" }
   end
 
-  def route(conv) do
+  defp route(conv) do
     %{ conv | resp_body: "Bears, Lions, Tigers" }
   end
 
-  def format_response(conv) do
+  defp format_response(conv) do
     """
     HTTP/1.1 200 OK
     Content-Type: text/html
