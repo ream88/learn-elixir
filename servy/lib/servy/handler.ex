@@ -27,23 +27,19 @@ defmodule Servy.Handler do
 
   defp rewrite_path(conv), do: conv
 
-  defp route(conv) do
-    route(conv, conv.path)
-  end
-
-  defp route(conv, "/wildthings") do
+  defp route(%{ path: "/wildthings" } = conv) do
     %{ conv | body: "Bears, Lions, Tigers" }
   end
 
-  defp route(conv, "/international-wildthings") do
+  defp route(%{ path: "/international-wildthings" } = conv) do
     %{ conv | body: "Beärs, Liöns, Tigers" }
   end
 
-  defp route(conv, "/bears") do
+  defp route(%{ path: "/bears" } = conv) do
     %{ conv | body: Enum.join(Wildthings.bears, ", ") }
   end
 
-  defp route(conv, "/bears/" <> id) do
+  defp route(%{ path: "/bears/" <> id } = conv) do
     body = Enum.at(Wildthings.bears, String.to_integer(id) - 1)
     cond do
       body == nil -> %{ conv | body: "No bear with id #{id} found", status: 404 }
@@ -51,7 +47,7 @@ defmodule Servy.Handler do
     end
   end
 
-  defp route(conv, path) do
+  defp route(%{ path: path } = conv) do
     %{ conv | body: "No #{path} found", status: 404 }
   end
 
