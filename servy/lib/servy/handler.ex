@@ -2,6 +2,7 @@ defmodule Servy.Handler do
   def handle(request) do
     request
     |> parse
+    |> rewrite_path
     |> log
     |> route
     |> format_response
@@ -18,6 +19,12 @@ defmodule Servy.Handler do
 
     %{ method: method, path: path, body: "", status: 200 }
   end
+
+  defp rewrite_path(%{ path: "/wildlife" } = conv) do
+    %{ conv | path: "/wildthings" }
+  end
+
+  defp rewrite_path(conv), do: conv
 
   defp route(conv) do
     route(conv, conv.path)

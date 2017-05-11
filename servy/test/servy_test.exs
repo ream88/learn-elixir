@@ -46,4 +46,9 @@ defmodule ServyTest do
     assert response =~ "No /bigfoot found"
     assert response =~ "404 Not Found"
   end
+
+  test "/wildlife" do
+    response = get("/wildlife")
+    assert response =~ "Bears, Lions, Tigers"
+  end
 end
