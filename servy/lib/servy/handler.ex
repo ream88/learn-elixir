@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Servy.Handler do
   def handle(request) do
     request
@@ -9,7 +11,10 @@ defmodule Servy.Handler do
     |> format_response
   end
 
-  defp log(conv), do: IO.inspect conv
+  defp log(conv) do
+    Logger.info inspect(conv)
+    conv
+  end
 
   defp parse(request) do
     [method, path, _] =
@@ -32,7 +37,7 @@ defmodule Servy.Handler do
   end
 
   defp rewrite_named_captures(conv, %{ "resource" => resource, "id" => id }) do
-    IO.puts "Rewriting #{conv.path} to /#{resource}/#{id}"
+    Logger.warn "Rewriting #{conv.path} to /#{resource}/#{id}"
     %{ conv | path: "/#{resource}/#{id}" }
   end
 
@@ -67,7 +72,7 @@ defmodule Servy.Handler do
   end
 
   defp track(%{ status: 404, path: path } = conv) do
-    IO.puts "Path #{path} not found!"
+    Logger.error "Path #{path} not found!"
     conv
   end
 
