@@ -51,4 +51,10 @@ defmodule ServyTest do
     response = get("/wildlife")
     assert response =~ "Bears, Lions, Tigers"
   end
+
+  test "/bears?id=1" do
+    response = get("/bears?id=1")
+    assert response =~ "Teddy"
+    assert response =~ "200 OK"
+  end
 end

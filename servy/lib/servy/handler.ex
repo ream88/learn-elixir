@@ -25,6 +25,10 @@ defmodule Servy.Handler do
     %{ conv | path: "/wildthings" }
   end
 
+  defp rewrite_path(%{ path: "/bears?id=" <> id } = conv) do
+    %{ conv | path: "/bears/#{id}" }
+  end
+
   defp rewrite_path(conv), do: conv
 
   defp route(%{ path: "/wildthings" } = conv) do
