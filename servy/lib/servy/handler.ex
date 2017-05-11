@@ -2,9 +2,12 @@ defmodule Servy.Handler do
   def handle(request) do
     request
     |> parse
+    |> log
     |> route
     |> format_response
   end
+
+  defp log(conv), do: IO.inspect conv
 
   defp parse(request) do
     [method, path, _] =
