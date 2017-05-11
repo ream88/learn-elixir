@@ -5,6 +5,7 @@ defmodule Servy.Handler do
     |> rewrite_path
     |> log
     |> route
+    |> track
     |> format_response
   end
 
@@ -53,6 +54,13 @@ defmodule Servy.Handler do
   defp route(conv, path) do
     %{ conv | body: "No #{path} found", status: 404 }
   end
+
+  defp track(%{ status: 404, path: path } = conv) do
+    IO.puts "Path #{path} not found!"
+    conv
+  end
+
+  defp track(conv), do: conv
 
   defp format_response(conv) do
     """
