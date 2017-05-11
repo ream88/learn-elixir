@@ -22,4 +22,9 @@ defmodule ServyTest do
     assert response =~ "Beärs, Liöns, Tigers"
     assert response =~ "Content-Length: 22"
   end
+
+  test "/bears" do
+    response = get("/bears")
+    assert response =~ "Teddy, Smokey, Paddington"
+  end
 end
