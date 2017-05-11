@@ -11,50 +11,66 @@ defmodule ServyTest do
     """)
   end
 
-  test "/wildthings" do
+  defp delete(path) do
+    Servy.Handler.handle("""
+    DELETE #{path} HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+
+    """)
+  end
+
+  test "GET /wildthings" do
     response = get("/wildthings")
     assert response =~ "Bears, Lions, Tigers"
     assert response =~ "Content-Length: 20"
     assert response =~ "200 OK"
   end
 
-  test "/international-wildthings" do
+  test "GET /international-wildthings" do
     response = get("/international-wildthings")
     assert response =~ "Beärs, Liöns, Tigers"
     assert response =~ "Content-Length: 22"
   end
 
-  test "/bears" do
+  test "GET /bears" do
     response = get("/bears")
     assert response =~ "Teddy, Smokey, Paddington"
   end
 
-  test "/bears/1" do
+  test "GET /bears/1" do
     response = get("/bears/1")
     assert response =~ "Teddy"
     assert response =~ "200 OK"
   end
 
-  test "/bears/4" do
+  test "GET /bears/4" do
     response = get("/bears/4")
     assert response =~ "No bear with id 4 found"
     assert response =~ "404 Not Found"
   end
 
-  test "/bigfoot" do
+  test "GET /bigfoot" do
     response = get("/bigfoot")
     assert response =~ "No /bigfoot found"
     assert response =~ "404 Not Found"
   end
 
-  test "/wildlife" do
+  test "GET /wildlife" do
     response = get("/wildlife")
     assert response =~ "Bears, Lions, Tigers"
   end
 
-  test "/bears?id=1" do
+  test "GET /bears?id=1" do
     response = get("/bears?id=1")
     assert response =~ "Teddy"
     assert response =~ "200 OK"
+  end
+
+  test "DELETE /bears/1" do
+    response = delete("/bears/1")
+    assert response =~ "Deleting a bear is forbidden!"
+    assert response =~ "403 Forbidden"
   end
 end

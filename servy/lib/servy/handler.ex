@@ -21,34 +21,38 @@ defmodule Servy.Handler do
     %{ method: method, path: path, body: "", status: 200 }
   end
 
-  defp rewrite_path(%{ path: "/wildlife" } = conv) do
+  defp rewrite_path(%{ method: "GET", path: "/wildlife" } = conv) do
     %{ conv | path: "/wildthings" }
   end
 
-  defp rewrite_path(%{ path: "/bears?id=" <> id } = conv) do
+  defp rewrite_path(%{ method: "GET", path: "/bears?id=" <> id } = conv) do
     %{ conv | path: "/bears/#{id}" }
   end
 
   defp rewrite_path(conv), do: conv
 
-  defp route(%{ path: "/wildthings" } = conv) do
+  defp route(%{ method: "GET", path: "/wildthings" } = conv) do
     %{ conv | body: "Bears, Lions, Tigers" }
   end
 
-  defp route(%{ path: "/international-wildthings" } = conv) do
+  defp route(%{ method: "GET", path: "/international-wildthings" } = conv) do
     %{ conv | body: "Beärs, Liöns, Tigers" }
   end
 
-  defp route(%{ path: "/bears" } = conv) do
+  defp route(%{ method: "GET", path: "/bears" } = conv) do
     %{ conv | body: Enum.join(Wildthings.bears, ", ") }
   end
 
-  defp route(%{ path: "/bears/" <> id } = conv) do
+  defp route(%{ method: "GET", path: "/bears/" <> id } = conv) do
     body = Enum.at(Wildthings.bears, String.to_integer(id) - 1)
     cond do
       body == nil -> %{ conv | body: "No bear with id #{id} found", status: 404 }
       body != nil -> %{ conv | body: body }
     end
+  end
+
+  defp route(%{ method: "DELETE", path: "/bears/" <> _id } = conv) do
+    %{ conv | body: "Deleting a bear is forbidden!", status: 403 }
   end
 
   defp route(%{ path: path } = conv) do
