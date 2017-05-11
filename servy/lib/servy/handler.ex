@@ -32,7 +32,15 @@ defmodule Servy.Handler do
   end
 
   defp route(conv, "/bears") do
-    %{ conv | body: "Teddy, Smokey, Paddington" }
+    %{ conv | body: Enum.join(Wildthings.bears, ", ") }
+  end
+
+  defp route(conv, "/bears/" <> id) do
+    body = Enum.at(Wildthings.bears, String.to_integer(id) - 1)
+    cond do
+      body == nil -> %{ conv | body: "No bear with id #{id} found", status: 404 }
+      body != nil -> %{ conv | body: body }
+    end
   end
 
   defp route(conv, path) do

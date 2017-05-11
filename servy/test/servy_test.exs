@@ -29,6 +29,18 @@ defmodule ServyTest do
     assert response =~ "Teddy, Smokey, Paddington"
   end
 
+  test "/bears/1" do
+    response = get("/bears/1")
+    assert response =~ "Teddy"
+    assert response =~ "200 OK"
+  end
+
+  test "/bears/4" do
+    response = get("/bears/4")
+    assert response =~ "No bear with id 4 found"
+    assert response =~ "404 Not Found"
+  end
+
   test "/bigfoot" do
     response = get("/bigfoot")
     assert response =~ "No /bigfoot found"
