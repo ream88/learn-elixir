@@ -52,16 +52,10 @@ defmodule Servy.Handler do
   end
 
   defp route(%{ method: "GET", path: "/pages/" <> page } = conv) do
-    file =
-      Path.expand("../../pages", __DIR__)
-      |> Path.join(page)
-      |> File.read
-
-    case file do
-      {:ok, content} -> %{ conv | body: content }
-      {:error, :enoent} -> %{ conv | status: 404, body: "Page #{page} not found" }
-      {:error, reason} -> %{ conv | status: 500, body: "Internal Server Error (Reason: #{reason})" }
-    end
+    Path.expand("../../pages", __DIR__)
+    |> Path.join(page)
+    |> File.read
+    |> handle_file(conv)
   end
 
   defp route(%{ method: "GET", path: "/bears" } = conv) do
@@ -82,6 +76,18 @@ defmodule Servy.Handler do
 
   defp route(%{ path: path } = conv) do
     %{ conv | body: "No #{path} found", status: 404 }
+  end
+
+  defp handle_file({:ok, content}, conv) do
+    %{ conv | body: content }
+  end
+
+  defp handle_file({:error, :enoent}, %{ path: "/pages/" <> page } = conv) do
+    %{ conv | status: 404, body: "Page #{page} not found" }
+  end
+
+  defp handle_file({:error, reason}, conv) do
+    %{ conv | status: 500, body: "Internal Server Error (Reason: #{reason})" }
   end
 
   defp track(%{ status: 404, path: path } = conv) do
