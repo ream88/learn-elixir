@@ -73,4 +73,23 @@ defmodule ServyTest do
     assert response =~ "Deleting a bear is forbidden!"
     assert response =~ "403 Forbidden"
   end
+
+  test "GET /pages/about.html" do
+    response = get("/pages/about.html")
+    assert response =~ "Hello World"
+    assert response =~ "200 OK"
+  end
+
+  test "GET /pages/yeti.html" do
+    response = get("/pages/yeti.html")
+    assert response =~ "Page yeti.html not found"
+    assert response =~ "404 Not Found"
+  end
+
+  # Arbitrary example, but I wanted to test 500s
+  test "GET /pages/" do
+    response = get("/pages/")
+    assert response =~ "Internal Server Error (Reason: eisdir)"
+    assert response =~ "500 Internal Server Error"
+  end
 end

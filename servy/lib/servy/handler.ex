@@ -51,6 +51,19 @@ defmodule Servy.Handler do
     %{ conv | body: "Beärs, Liöns, Tigers" }
   end
 
+  defp route(%{ method: "GET", path: "/pages/" <> page } = conv) do
+    file =
+      Path.expand("../../pages", __DIR__)
+      |> Path.join(page)
+      |> File.read
+
+    case file do
+      {:ok, content} -> %{ conv | body: content }
+      {:error, :enoent} -> %{ conv | status: 404, body: "Page #{page} not found" }
+      {:error, reason} -> %{ conv | status: 500, body: "Internal Server Error (Reason: #{reason})" }
+    end
+  end
+
   defp route(%{ method: "GET", path: "/bears" } = conv) do
     %{ conv | body: Enum.join(Wildthings.bears, ", ") }
   end
