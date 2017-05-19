@@ -92,4 +92,10 @@ defmodule ServyTest do
     assert response =~ "Internal Server Error (Reason: eisdir)"
     assert response =~ "500 Internal Server Error"
   end
+
+  test "GET /pages/form.html" do
+    response = get("/pages/form.html")
+    assert response =~ "Create Bear"
+    assert response =~ "200 OK"
+  end
 end
