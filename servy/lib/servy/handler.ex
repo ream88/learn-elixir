@@ -1,6 +1,8 @@
 require Logger
 
 defmodule Servy.Handler do
+  @pages_path Path.expand("../../pages", __DIR__)
+
   def handle(request) do
     request
     |> parse
@@ -52,7 +54,7 @@ defmodule Servy.Handler do
   end
 
   defp route(%{ method: "GET", path: "/pages/" <> page } = conv) do
-    Path.expand("../../pages", __DIR__)
+    @pages_path
     |> Path.join(page)
     |> File.read
     |> handle_file(conv)
