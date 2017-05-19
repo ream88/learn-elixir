@@ -1,7 +1,7 @@
-require Logger
-
 defmodule Servy.Handler do
-  @pages_path Path.expand("../../pages", __DIR__)
+  import Servy.Parser, only: [parse: 1]
+  import Servy.Plugins, only: [log: 1, track: 1, rewrite_path: 1]
+  import Servy.Routes, only: [route: 1]
 
   def handle(request) do
     request
@@ -12,92 +12,6 @@ defmodule Servy.Handler do
     |> track
     |> format_response
   end
-
-  defp log(conv) do
-    Logger.info inspect(conv)
-    conv
-  end
-
-  defp parse(request) do
-    [method, path, _] =
-      request
-      |> String.split("\n")
-      |> Enum.at(0)
-      |> String.split(" ")
-
-    %{ method: method, path: path, body: "", status: 200 }
-  end
-
-  defp rewrite_path(%{ method: "GET", path: "/wildlife" } = conv) do
-    %{ conv | path: "/wildthings" }
-  end
-
-  defp rewrite_path(%{ path: path } = conv) do
-    regex = ~r{\/(?<resource>\w+)\?id=(?<id>\d)}
-    captures = Regex.named_captures(regex, path)
-    rewrite_named_captures(conv, captures)
-  end
-
-  defp rewrite_named_captures(conv, %{ "resource" => resource, "id" => id }) do
-    Logger.warn "Rewriting #{conv.path} to /#{resource}/#{id}"
-    %{ conv | path: "/#{resource}/#{id}" }
-  end
-
-  defp rewrite_named_captures(conv, _captures), do: conv
-
-  defp route(%{ method: "GET", path: "/wildthings" } = conv) do
-    %{ conv | body: "Bears, Lions, Tigers" }
-  end
-
-  defp route(%{ method: "GET", path: "/international-wildthings" } = conv) do
-    %{ conv | body: "Beärs, Liöns, Tigers" }
-  end
-
-  defp route(%{ method: "GET", path: "/pages/" <> page } = conv) do
-    @pages_path
-    |> Path.join(page)
-    |> File.read
-    |> handle_file(conv)
-  end
-
-  defp route(%{ method: "GET", path: "/bears" } = conv) do
-    %{ conv | body: Enum.join(Wildthings.bears, ", ") }
-  end
-
-  defp route(%{ method: "GET", path: "/bears/" <> id } = conv) do
-    body = Enum.at(Wildthings.bears, String.to_integer(id) - 1)
-    cond do
-      body == nil -> %{ conv | body: "No bear with id #{id} found", status: 404 }
-      body != nil -> %{ conv | body: body }
-    end
-  end
-
-  defp route(%{ method: "DELETE", path: "/bears/" <> _id } = conv) do
-    %{ conv | body: "Deleting a bear is forbidden!", status: 403 }
-  end
-
-  defp route(%{ path: path } = conv) do
-    %{ conv | body: "No #{path} found", status: 404 }
-  end
-
-  defp handle_file({:ok, content}, conv) do
-    %{ conv | body: content }
-  end
-
-  defp handle_file({:error, :enoent}, %{ path: "/pages/" <> page } = conv) do
-    %{ conv | status: 404, body: "Page #{page} not found" }
-  end
-
-  defp handle_file({:error, reason}, conv) do
-    %{ conv | status: 500, body: "Internal Server Error (Reason: #{reason})" }
-  end
-
-  defp track(%{ status: 404, path: path } = conv) do
-    Logger.error "Path #{path} not found!"
-    conv
-  end
-
-  defp track(conv), do: conv
 
   defp format_response(conv) do
     """
