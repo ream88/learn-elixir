@@ -1,5 +1,5 @@
 defmodule Servy.Routes do
-  @pages_path Path.expand("../../pages", __DIR__)
+  @pages_path Path.expand("pages", File.cwd!)
 
   import Servy.FileHandler, only: [handle_file: 2]
 
