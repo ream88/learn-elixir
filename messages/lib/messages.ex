@@ -52,10 +52,10 @@ defmodule Messages do
   Handles a incoming message.
 
       iex> Messages.handle_cast({:message, "Hey, how are you?"}, [])
-      {:noreply, ["Hey, how are you?"]}
+      {:noreply, [{:unseen, "Hey, how are you?"}]}
   """
   def handle_cast({:message, message}, state) do
-    {:noreply, [message | state]}
+    {:noreply, [{:unseen, message} | state]}
   end
 
   @doc """
@@ -64,10 +64,12 @@ defmodule Messages do
       iex> Messages.handle_call(:view, nil, [])
       {:reply, [], []}
 
-      iex> Messages.handle_call(:view, nil, ["Hey, how are you?"])
-      {:reply, ["Hey, how are you?"], ["Hey, how are you?"]}
+      iex> Messages.handle_call(:view, nil, [{:unseen, "Hey, how are you?"}])
+      {:reply, ["Hey, how are you?"], [{:seen, "Hey, how are you?"}]}
   """
   def handle_call(:view, _from, state) do
-    {:reply, state, state}
+    new_state = Enum.map(state, fn {_, message} -> {:seen, message} end)
+    messages = Enum.map(state, fn {_, message} -> message end)
+    {:reply, messages, new_state}
   end
 end
