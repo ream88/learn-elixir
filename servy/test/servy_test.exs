@@ -11,6 +11,19 @@ defmodule ServyTest do
     """)
   end
 
+  defp post(path, body) do
+    Servy.Handler.handle("""
+    POST #{path} HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+    Content-Type: application/x-www-form-urlencoded
+    Content-Length: #{byte_size(body)}
+
+    #{body}
+    """)
+  end
+
   defp delete(path) do
     Servy.Handler.handle("""
     DELETE #{path} HTTP/1.1
@@ -96,6 +109,12 @@ defmodule ServyTest do
   test "GET /pages/form.html" do
     response = get("/pages/form.html")
     assert response =~ "Create Bear"
+    assert response =~ "200 OK"
+  end
+
+  test "POST /bears" do
+    response = post("/bears", "name=Baloo&type=Brown")
+    assert response =~ "A Brown bear named Baloo was created"
     assert response =~ "200 OK"
   end
 end

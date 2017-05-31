@@ -31,6 +31,10 @@ defmodule Servy.Routes do
     end
   end
 
+  def route(%Conv{ method: "POST", path: "/bears", params: params } = conv) do
+    %{ conv | body: "A #{params["type"]} bear named #{params["name"]} was created" }
+  end
+
   def route(%Conv{ method: "DELETE", path: "/bears/" <> _id } = conv) do
     %{ conv | body: "Deleting a bear is forbidden!", status: 403 }
   end
