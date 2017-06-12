@@ -49,7 +49,7 @@ defmodule ServyTest do
 
   test "GET /bears" do
     response = get("/bears")
-    assert response =~ "Teddy, Smokey, Paddington"
+    assert response =~ "Brutus, Kenai, Scarface"
   end
 
   test "GET /bears/1" do
@@ -58,9 +58,15 @@ defmodule ServyTest do
     assert response =~ "200 OK"
   end
 
-  test "GET /bears/4" do
-    response = get("/bears/4")
-    assert response =~ "No bear with id 4 found"
+  test "GET /bears/3 is not index based" do
+    response = get("/bears/3")
+    assert response =~ "Paddington"
+    assert response =~ "200 OK"
+  end
+
+  test "GET /bears/404" do
+    response = get("/bears/404")
+    assert response =~ "No bear with id 404 found"
     assert response =~ "404 Not Found"
   end
 
