@@ -26,4 +26,8 @@ defmodule Servy.BearController do
       bear != nil -> %{ conv | body: bear_name(bear) }
     end
   end
+
+  def delete(%Conv{} = conv, _) do
+    %{ conv | body: "Deleting a bear is forbidden!", status: 403 }
+  end
 end
