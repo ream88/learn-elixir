@@ -15,19 +15,20 @@ defmodule Servy.BearController do
       |> Enum.map(&bear_name/1)
       |> Enum.join(", ")
 
-    %{ conv | body: body }
+    %{conv | body: body}
   end
 
-  def show(%Conv{} = conv, %{ "id" => id }) do
+  def show(%Conv{} = conv, %{"id" => id}) do
     bear = Wildthings.get_bear(id)
 
-    cond do
-      bear == nil -> %{ conv | body: "No bear with id #{id} found", status: 404 }
-      bear != nil -> %{ conv | body: bear_name(bear) }
+    if bear != nil do
+      %{conv | body: bear_name(bear)}
+    else
+      %{conv | body: "No bear with id #{id} found", status: 404}
     end
   end
 
   def delete(%Conv{} = conv, _) do
-    %{ conv | body: "Deleting a bear is forbidden!", status: 403 }
+    %{conv | body: "Deleting a bear is forbidden!", status: 403}
   end
 end
