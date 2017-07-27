@@ -17,17 +17,36 @@ defmodule Servy.Parser do
     }
   end
 
-  defp parse_params("application/x-www-form-urlencoded", params_string) do
+  @doc """
+  Parses the given string of the form "application/x-www-form-urlencoded"
+  into a map with corresponding keys and values.
+
+  ## Examples
+
+      iex> Servy.Parser.parse_params("application/x-www-form-urlencoded", "one=1&two=2")
+      %{"one" => "1", "two" => "2"}
+
+  """
+  def parse_params("application/x-www-form-urlencoded", params_string) do
     params_string |> String.trim |> URI.decode_query
   end
 
-  defp parse_params(_, _), do: %{}
+  def parse_params(_, _), do: %{}
 
-  defp parse_headers(lines) do
+  @doc """
+  Parses the given list of headers into a map.
+
+  ## Examples
+
+      iex> Servy.Parser.parse_headers(["Host: example.com", "Content-Type: application/json"])
+      %{"Host" => "example.com", "Content-Type" => "application/json"}
+
+  """
+  def parse_headers(lines) do
     Enum.reduce(lines, %{}, &parse_header/2)
   end
 
-  defp parse_header(line, headers) do
+  def parse_header(line, headers) do
     [key, value] = String.split(line, ": ")
     Map.put(headers, key, value)
   end
