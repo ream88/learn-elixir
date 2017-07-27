@@ -17,7 +17,7 @@ defmodule Servy.Handler do
   defp format_response(%Conv{} = conv) do
     """
     HTTP/1.1 #{Conv.full_status(conv)}
-    Content-Type: text/html
+    Content-Type: #{conv.content_type}
     Content-Length: #{Conv.content_length(conv)}
 
     #{conv.body}

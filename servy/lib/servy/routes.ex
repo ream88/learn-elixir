@@ -1,8 +1,9 @@
 defmodule Servy.Routes do
   @pages_path Path.expand("pages", File.cwd!)
 
-  alias Servy.Conv
+  alias Servy.Api
   alias Servy.BearController
+  alias Servy.Conv
 
   import Servy.FileHandler, only: [handle_file: 2]
 
@@ -23,6 +24,10 @@ defmodule Servy.Routes do
 
   def route(%Conv{method: "GET", path: "/bears"} = conv) do
     BearController.index(conv, conv.params)
+  end
+
+  def route(%Conv{method: "GET", path: "/api/bears"} = conv) do
+    Api.BearController.index(conv, conv.params)
   end
 
   def route(%Conv{method: "GET", path: "/bears/" <> id} = conv) do
