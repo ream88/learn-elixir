@@ -3,23 +3,30 @@ defmodule Servy.BearController do
   alias Servy.Conv
   alias Servy.Wildthings
 
-  def index(%Conv{} = conv, _) do
-    body =
-      Wildthings.list_bears
-      |> Enum.filter(&Bear.is_grizzly/1)
-      |> Enum.sort(&Bear.order_by_name_asc/2)
-      |> Enum.map(fn(bear) -> "<li>#{bear.name}</li>" end)
+  @templates_path Path.expand("templates", File.cwd!)
 
-    %{conv | body: "<h1>All the bears!</h1> <ul>#{body}</ul>"}
+  def index(%Conv{} = conv, _) do
+    bears =
+      Wildthings.list_bears
+      |> Enum.sort(&Bear.order_by_name_asc/2)
+
+    body =
+      @templates_path
+      |> Path.join("index.eex")
+      |> EEx.eval_file(bears: bears)
+
+    %{conv | body: body}
   end
 
   def show(%Conv{} = conv, %{"id" => id}) do
-    bear = Wildthings.get_bear(id)
-
-    if bear != nil do
-      %{conv | body: "<h1>Show bear</h1> Is #{bear.name} hibernating? <strong>#{bear.hibernating?}</strong>"}
-    else
-      %{conv | body: "No bear with id #{id} found", status: 404}
+    case Wildthings.get_bear(id) do
+      nil -> %{conv | body: "No bear with id #{id} found", status: 404}
+      bear ->
+        body =
+          @templates_path
+          |> Path.join("show.eex")
+          |> EEx.eval_file(bear: bear)
+        %{conv | body: body}
     end
   end
 
