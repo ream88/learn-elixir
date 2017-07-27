@@ -4,12 +4,18 @@ defmodule Servy.Plugins do
   alias Servy.Conv
 
   def log(%Conv{} = conv) do
-    Logger.info inspect(conv)
+    if Mix.env == :dev do
+      Logger.info inspect(conv)
+    end
+
     conv
   end
 
   def track(%Conv{status: 404, path: path} = conv) do
-    Logger.error "Path #{path} not found!"
+    if Mix.env == :dev do
+      Logger.error "Path #{path} not found!"
+    end
+
     conv
   end
 
@@ -26,7 +32,10 @@ defmodule Servy.Plugins do
   end
 
   defp rewrite_named_captures(%Conv{} = conv, %{"resource" => resource, "id" => id}) do
-    Logger.warn "Rewriting #{conv.path} to /#{resource}/#{id}"
+    if Mix.env == :dev do
+      Logger.warn "Rewriting #{conv.path} to /#{resource}/#{id}"
+    end
+
     %{conv | path: "/#{resource}/#{id}"}
   end
 
