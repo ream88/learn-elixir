@@ -49,13 +49,18 @@ defmodule ServyTest do
 
   test "GET /bears" do
     response = get("/bears")
-    assert response =~ "Brutus, Kenai, Scarface"
+    assert response =~ "<h1>All the bears!</h1>"
+    assert response =~ "<li>Brutus</li>"
+    assert response =~ "<li>Kenai</li>"
+    assert response =~ "<li>Scarface</li>"
   end
 
   test "GET /bears/1" do
     response = get("/bears/1")
     assert response =~ "Teddy"
     assert response =~ "200 OK"
+    assert response =~ "<h1>Show bear</h1>"
+    assert response =~ "Is Teddy hibernating? <strong>true</strong>"
   end
 
   test "GET /bears/3 is not index based" do
