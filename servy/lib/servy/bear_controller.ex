@@ -10,27 +10,26 @@ defmodule Servy.BearController do
       Wildthings.list_bears
       |> Enum.sort(&Bear.order_by_name_asc/2)
 
-    body =
-      @templates_path
-      |> Path.join("index.eex")
-      |> EEx.eval_file(bears: bears)
-
-    %{conv | body: body}
+    render(conv, "index.eex", bears: bears)
   end
 
   def show(%Conv{} = conv, %{"id" => id}) do
     case Wildthings.get_bear(id) do
       nil -> %{conv | body: "No bear with id #{id} found", status: 404}
-      bear ->
-        body =
-          @templates_path
-          |> Path.join("show.eex")
-          |> EEx.eval_file(bear: bear)
-        %{conv | body: body}
+      bear -> render(conv, "show.eex", bear: bear)
     end
   end
 
   def delete(%Conv{} = conv, _) do
     %{conv | body: "Deleting a bear is forbidden!", status: 403}
+  end
+
+  defp render(%Conv{} = conv, template, bindings \\ []) do
+    body =
+      @templates_path
+      |> Path.join(template)
+      |> EEx.eval_file(bindings)
+
+    %{conv | body: body}
   end
 end
