@@ -4,10 +4,30 @@ defmodule Servy.Api.BearController do
   alias Servy.Wildthings
 
   def index(%Conv{} = conv, _) do
-    bears =
+    body =
       Wildthings.list_bears
       |> Enum.sort(&Bear.order_by_name_asc/2)
+      |> Enum.map(&Map.from_struct/1)
+      |> Enum.map(&normalize_keys/1)
+      |> Poison.encode!
 
-    %{conv | body: Poison.encode!(bears), content_type: "application/json" }
+    %{conv | body: body, content_type: "application/json" }
+  end
+
+  @doc """
+    Normalizes all keys for JSON in the given map.
+
+    iex> Servy.Api.BearController.normalize_keys(%{hibernating?: true})
+    %{hibernating: true}
+  """
+  def normalize_keys(map) do
+    for {key, val} <- map, into: %{}, do: {normalize_key(key), val}
+  end
+
+  defp normalize_key(key) do
+    key
+    |> Atom.to_string
+    |> String.replace(~r/\?/, "")
+    |> String.to_atom
   end
 end
