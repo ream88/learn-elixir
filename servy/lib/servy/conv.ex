@@ -4,7 +4,7 @@ defmodule Servy.Conv do
             headers: %{},
             params: %{},
             body: "",
-            content_type: "text/html",
+            response_headers: %{"Content-Type" => "text/html"},
             status: 200
 
   alias Servy.Conv

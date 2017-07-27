@@ -2,6 +2,7 @@ defmodule Servy.Api.BearController do
   alias Servy.Bear
   alias Servy.Conv
   alias Servy.Wildthings
+  import Servy.Handler, only: [put_content_type: 2]
 
   def index(%Conv{} = conv, _) do
     body =
@@ -11,7 +12,8 @@ defmodule Servy.Api.BearController do
       |> Enum.map(&normalize_keys/1)
       |> Poison.encode!
 
-    %{conv | body: body, content_type: "application/json" }
+    conv = put_content_type(conv, "application/json")
+    %{conv | body: body }
   end
 
   @doc """
