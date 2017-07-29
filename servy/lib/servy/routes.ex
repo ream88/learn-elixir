@@ -54,6 +54,10 @@ defmodule Servy.Routes do
     BearController.delete(conv, conv.params)
   end
 
+  def route(%Conv{path: "/kaboom"}) do
+    raise "Kaboom!"
+  end
+
   def route(%Conv{path: path} = conv) do
     %{conv | body: "No #{path} found", status: 404}
   end
