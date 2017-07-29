@@ -38,6 +38,9 @@ defmodule Servy.Routes do
   def route(%Conv{method: "POST", path: "/bears", params: params} = conv) do
     %{conv | body: "A #{params["type"]} bear named #{params["name"]} was created", status: 201}
   end
+
+  def route(%Conv{method: "POST", path: "/api/bears"} = conv) do
+    Api.BearController.create(conv, conv.params)
   end
 
   def route(%Conv{method: "DELETE", path: "/bears/" <> _id} = conv) do

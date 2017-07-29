@@ -11,13 +11,13 @@ defmodule TestHelper do
     """)
   end
 
-  def post(path, body) do
+  def post(path, body, content_type \\ "application/x-www-form-urlencoded") do
     Servy.Handler.handle("""
     POST #{path} HTTP/1.1\r
     Host: example.com\r
     User-Agent: ExampleBrowser/1.0\r
     Accept: */*\r
-    Content-Type: application/x-www-form-urlencoded\r
+    Content-Type: #{content_type}\r
     Content-Length: #{byte_size(body)}\r
     \r
     #{body}

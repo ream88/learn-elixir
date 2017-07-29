@@ -16,6 +16,10 @@ defmodule Servy.Api.BearController do
     %{conv | body: body }
   end
 
+  def create(%Conv{} = conv, params) do
+    %{conv | body: "A #{params["type"]} bear named #{params["name"]} was created", status: 201}
+  end
+
   @doc """
     Normalizes all keys for JSON in the given map.
 

@@ -7,7 +7,7 @@ defmodule ApiTest do
     String.replace(string, ~r/\s/, "")
   end
 
-  test "/api/bears returns list of bears" do
+  test "GET /api/bears returns list of bears" do
     response = get("/api/bears")
     assert response =~ "Content-Type: application/json"
     assert response =~ remove_whitespace("""
@@ -63,5 +63,16 @@ defmodule ApiTest do
         "hibernating": true
       }]
     """)
+  end
+
+  test "POST /api/bears" do
+    response = post("/api/bears", ~s({"name": "Breezly", "type": "Polar"}), "application/json")
+    assert response == """
+    HTTP/1.1 201 Created\r
+    Content-Type: text/html\r
+    Content-Length: 38\r
+    \r
+    A Polar bear named Breezly was created
+    """
   end
 end

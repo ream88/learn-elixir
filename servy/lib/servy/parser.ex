@@ -31,6 +31,20 @@ defmodule Servy.Parser do
     params_string |> String.trim |> URI.decode_query
   end
 
+  @doc """
+  Parses the given string of the form "application/json"
+  into a map with corresponding keys and values.
+
+  ## Examples
+
+      iex> Servy.Parser.parse_params("application/json", ~s({"one": "1", "two": "2"}))
+      %{"one" => "1", "two" => "2"}
+
+  """
+  def parse_params("application/json", params_string) do
+    Poison.Parser.parse!(params_string)
+  end
+
   def parse_params(_, _), do: %{}
 
   @doc """
