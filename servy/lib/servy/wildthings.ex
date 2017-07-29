@@ -7,9 +7,8 @@ defmodule Servy.Wildthings do
     @db_path
     |> Path.join("bears.json")
     |> File.read!
-    |> Poison.decode!(keys: :atoms)
-    |> Map.get(:bears)
-    |> Enum.map(fn(attributes) -> struct(Bear, attributes) end)
+    |> Poison.decode!(as: %{"bears" => [%Bear{}]})
+    |> Map.get("bears")
   end
 
   def get_bear(id) when is_integer(id) do
