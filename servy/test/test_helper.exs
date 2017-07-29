@@ -3,34 +3,34 @@ ExUnit.start()
 defmodule TestHelper do
   def get(path) do
     Servy.Handler.handle("""
-    GET #{path} HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET #{path} HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """)
   end
 
   def post(path, body) do
     Servy.Handler.handle("""
-    POST #{path} HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-    Content-Type: application/x-www-form-urlencoded
-    Content-Length: #{byte_size(body)}
-
+    POST #{path} HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    Content-Type: application/x-www-form-urlencoded\r
+    Content-Length: #{byte_size(body)}\r
+    \r
     #{body}
     """)
   end
 
   def delete(path) do
     Servy.Handler.handle("""
-    DELETE #{path} HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    DELETE #{path} HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """)
   end
 end

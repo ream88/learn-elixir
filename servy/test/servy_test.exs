@@ -4,9 +4,13 @@ defmodule ServyTest do
 
   test "GET /wildthings" do
     response = get("/wildthings")
-    assert response =~ "Bears, Lions, Tigers"
-    assert response =~ "Content-Length: 20"
-    assert response =~ "200 OK"
+    assert response == """
+    HTTP/1.1 200 OK\r
+    Content-Type: text/html\r
+    Content-Length: 20\r
+    \r
+    Bears, Lions, Tigers
+    """
   end
 
   test "GET /international-wildthings" do
@@ -94,6 +98,6 @@ defmodule ServyTest do
   test "POST /bears" do
     response = post("/bears", "name=Baloo&type=Brown")
     assert response =~ "A Brown bear named Baloo was created"
-    assert response =~ "200 OK"
+    assert response =~ "201 Created"
   end
 end

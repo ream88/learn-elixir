@@ -23,7 +23,7 @@ defmodule Servy.Handler do
 
     """
     HTTP/1.1 #{Conv.full_status(conv)}\r
-    #{response_headers}
+    #{response_headers}\r
     \r
     #{conv.body}
     """
