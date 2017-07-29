@@ -82,13 +82,6 @@ defmodule ServyTest do
     assert response =~ "404 Not Found"
   end
 
-  # Arbitrary example, but I wanted to test 500s
-  test "GET /pages/" do
-    response = get("/pages/")
-    assert response =~ "Internal Server Error (Reason: eisdir)"
-    assert response =~ "500 Internal Server Error"
-  end
-
   test "GET /pages/form.html" do
     response = get("/pages/form.html")
     assert response =~ "Create Bear"
