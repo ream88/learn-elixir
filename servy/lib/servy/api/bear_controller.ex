@@ -23,7 +23,7 @@ defmodule Servy.Api.BearController do
   @doc """
     Normalizes all keys for JSON in the given map.
 
-    iex> Servy.Api.BearController.normalize_keys(%{hibernating?: true})
+    iex> Servy.Api.BearController.normalize_keys(%{hibernating: true})
     %{hibernating: true}
   """
   def normalize_keys(map) do

@@ -15,7 +15,7 @@ defmodule ApiTest do
         "type": "Grizzly",
         "name": "Brutus",
         "id": 6,
-        "hibernating": true
+        "hibernating": false
       }, {
         "type": "Polar",
         "name": "Iceman",
@@ -25,17 +25,17 @@ defmodule ApiTest do
         "type": "Grizzly",
         "name": "Kenai",
         "id": 10,
-        "hibernating": true
+        "hibernating": false
       }, {
         "type": "Brown",
         "name": "Paddington",
         "id": 3,
-        "hibernating": true
+        "hibernating": false
       }, {
         "type": "Panda",
         "name": "Roscoe",
         "id": 8,
-        "hibernating": true
+        "hibernating": false
       }, {
         "type": "Black",
         "name": "Rosie",
@@ -50,12 +50,12 @@ defmodule ApiTest do
         "type": "Black",
         "name": "Smokey",
         "id": 2,
-        "hibernating": true
+        "hibernating": false
       }, {
         "type": "Polar",
         "name": "Snow",
         "id": 5,
-        "hibernating": true
+        "hibernating": false
       }, {
         "type": "Brown",
         "name": "Teddy",
