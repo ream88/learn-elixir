@@ -82,6 +82,12 @@ defmodule ServyTest do
     assert response =~ "404 Not Found"
   end
 
+  test "GET /pages/faq" do
+    response = get("/pages/faq")
+    assert response =~ "200 OK"
+    assert response =~ "<h1>Frequently Asked Questions</h1>"
+  end
+
   test "GET /pages/form.html" do
     response = get("/pages/form.html")
     assert response =~ "Create Bear"

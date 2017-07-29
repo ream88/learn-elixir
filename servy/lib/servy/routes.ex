@@ -5,7 +5,7 @@ defmodule Servy.Routes do
   alias Servy.BearController
   alias Servy.Conv
 
-  import Servy.FileHandler, only: [handle_file: 2]
+  import Servy.FileHandler
 
   def route(%Conv{method: "GET", path: "/wildthings"} = conv) do
     %{conv | body: "Bears, Lions, Tigers"}
@@ -16,10 +16,17 @@ defmodule Servy.Routes do
   end
 
   def route(%Conv{method: "GET", path: "/pages/" <> page} = conv) do
+    page =
+      case Path.extname(page) do
+        ".html" -> page
+        "" -> "#{page}.md"
+      end
+
     @pages_path
     |> Path.join(page)
     |> File.read
     |> handle_file(conv)
+    |> handle_format
   end
 
   def route(%Conv{method: "GET", path: "/bears"} = conv) do
