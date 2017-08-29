@@ -33,17 +33,12 @@ defmodule MyList do
     :lists.reverse(acc)
   end
 
+  def sum([]) do
+    0
+  end
+
   def sum(list) do
-    do_sum(list, 0)
-  end
-
-  defp do_sum([], acc) do
-    acc
-  end
-
-  defp do_sum([item | list], acc) do
-    acc = acc + item
-    do_sum(list, acc)
+    reduce(list, fn(item, acc) -> acc + item end)
   end
 
   def reduce([acc | list], fun) do
