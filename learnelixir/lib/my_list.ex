@@ -19,4 +19,17 @@ defmodule MyList do
     fun.(item)
     each(list, fun)
   end
+
+  def map(list, fun) do
+    map(list, fun, [])
+  end
+
+  defp map([item | list], fun, acc) do
+    acc = acc ++ [fun.(item)]
+    map(list, fun, acc)
+  end
+
+  defp map([], _fun, acc) do
+    acc
+  end
 end
