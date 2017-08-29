@@ -1,14 +1,14 @@
 defmodule MyList do
   def length(list) do
-    length(list, 0)
+    do_length(list, 0)
   end
 
-  defp length([], count) do
+  defp do_length([], count) do
     count
   end
 
-  defp length([_ | list], count) do
-    length(list, count + 1)
+  defp do_length([_ | list], count) do
+    do_length(list, count + 1)
   end
 
   def each([], _fun) do
@@ -21,15 +21,15 @@ defmodule MyList do
   end
 
   def map(list, fun) do
-    map(list, fun, [])
+    do_map(list, fun, [])
   end
 
-  defp map([item | list], fun, acc) do
+  defp do_map([item | list], fun, acc) do
     acc = acc ++ [fun.(item)]
-    map(list, fun, acc)
+    do_map(list, fun, acc)
   end
 
-  defp map([], _fun, acc) do
+  defp do_map([], _fun, acc) do
     acc
   end
 end
