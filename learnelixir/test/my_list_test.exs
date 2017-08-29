@@ -77,4 +77,18 @@ defmodule MyListTest do
       assert MyList.reduce([1, 2, 3], fun) == 6
     end
   end
+
+  describe "reverse" do
+    test "is given an empty list" do
+      assert MyList.reverse([]) == []
+    end
+
+    test "is given a list with 1 item" do
+      assert MyList.reverse([1]) == [1]
+    end
+
+    test "is given a list with 3 items" do
+      assert MyList.reverse([1, 2, 3]) == [3, 2, 1]
+    end
+  end
 end

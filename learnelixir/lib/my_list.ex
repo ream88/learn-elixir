@@ -30,18 +30,18 @@ defmodule MyList do
   end
 
   defp do_map([], _fun, acc) do
-    :lists.reverse(acc)
-  end
-
-  def sum([]) do
-    0
+    reverse(acc)
   end
 
   def sum(list) do
-    reduce(list, fn(item, acc) -> acc + item end)
+    reduce(list, fn(item, acc) -> acc + item end, 0)
   end
 
   def reduce([acc | list], fun) do
+    do_reduce(list, fun, acc)
+  end
+
+  def reduce(list, fun, acc) do
     do_reduce(list, fun, acc)
   end
 
@@ -52,5 +52,9 @@ defmodule MyList do
   defp do_reduce([item | list], fun, acc) do
     acc = fun.(item, acc)
     do_reduce(list, fun, acc)
+  end
+
+  def reverse(list) do
+    reduce(list, fn(item, acc) -> [item] ++ acc  end, [])
   end
 end
