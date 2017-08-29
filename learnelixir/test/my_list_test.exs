@@ -33,4 +33,14 @@ defmodule MyListTest do
       assert MyList.map([1, 2, 3], fun) == [2, 4, 6]
     end
   end
+
+  describe "sum" do
+    test "is given an empty list" do
+      assert MyList.sum([]) == 0
+    end
+
+    test "is given a list with 3 items" do
+      assert MyList.sum([1, 2, 3]) == 6
+    end
+  end
 end
