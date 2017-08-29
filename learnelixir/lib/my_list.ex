@@ -45,4 +45,17 @@ defmodule MyList do
     acc = acc + item
     do_sum(list, acc)
   end
+
+  def reduce([acc | list], fun) do
+    do_reduce(list, fun, acc)
+  end
+
+  defp do_reduce([], _fun, acc) do
+    acc
+  end
+
+  defp do_reduce([item | list], fun, acc) do
+    acc = fun.(item, acc)
+    do_reduce(list, fun, acc)
+  end
 end

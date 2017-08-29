@@ -43,4 +43,16 @@ defmodule MyListTest do
       assert MyList.sum([1, 2, 3]) == 6
     end
   end
+
+  describe "reduce" do
+    test "is given an empty list" do
+      fun = fn(i, acc) -> i + acc end
+      assert_raise FunctionClauseError, fn() -> MyList.reduce([], fun) end
+    end
+
+    test "is given a list with 3 items" do
+      fun = fn(i, acc) -> i + acc end
+      assert MyList.reduce([1, 2, 3], fun) == 6
+    end
+  end
 end
