@@ -25,11 +25,11 @@ defmodule MyList do
   end
 
   defp do_map([item | list], fun, acc) do
-    acc = acc ++ [fun.(item)]
+    acc = [fun.(item) | acc]
     do_map(list, fun, acc)
   end
 
   defp do_map([], _fun, acc) do
-    acc
+    :lists.reverse(acc)
   end
 end
